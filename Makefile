@@ -1,11 +1,9 @@
-NAME = Inception
+all: docker-compose -f ./srcs/docker-compose.yml up
 
-all: $(NAME)
+clean: docker-compose -f ./srcs/docker-compose.yml down
 
-clean:
+fclean: clean
 
-fclean:
-
-re:
+re: fclean all
 
 .PHONY: all clean fclean re
