@@ -1,9 +1,13 @@
 FROM debian:buster
 
-RUN apt-get update && \
-    apt-get -yq install mariadb-server mariadb-client
-COPY ./tools/runMariaDB.sh .
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install mariadb-server
+
+RUN apt-get -y install vim
+
+# COPY ./tools/runMariaDB.sh .
 # COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-RUN mysql_install_db
 EXPOSE 3306
-ENTRYPOINT [ "sh", "runMariaDB.sh" ]
+CMD bin/bash
+# ENTRYPOINT [ "sh", "runMariaDB.sh" ]
