@@ -1,9 +1,15 @@
-all: docker-compose -f ./srcs/docker-compose.yml up
+.PHONY:	all up fclean
 
-clean: docker-compose -f ./srcs/docker-compose.yml down
+all:
+		@sudo mkdir -p /home/jinchoi/data/wordpress
+		@sudo mkdir -p /home/jinchoi/data/database
+		@sudo echo "127.0.0.1 jinchoi.42.fr" >> /etc/hosts
+		@sudo docker-compose -f srcs/docker-compose.yml up --build -d
 
-fclean: clean
+up:
+		@sudo docker-compose -f srcs/docker-compose.yml up --build -d
 
-re: fclean all
-
-.PHONY: all clean fclean re
+fclean:
+		@sudo docker-compose -f srcs/docker-compose.yml down --rmi all --volumes
+		@sudo docker rmi debian:buster
+		@sudo rm -rf /home/jinchoi/

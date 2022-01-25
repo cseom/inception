@@ -6,66 +6,72 @@ services:
 
   # nginx
   nginx:
-    container_name: Container_NGINX
-    depends_on:
-      - wordpress
     build: ./requirements/nginx
-    image: inception_nginx
-    volumes_from:
-      - wordpress
-    networks:
-      - inception_network
+    container_name: nginx
+    # image: nginx
     ports:
       - "443:443"
     restart: always
-
-  # wordpress
-  wordpress:
-    container_name: Container_WordPress+PHP
     depends_on:
-      - mariadb
-    build: ./requirements/wordpress
-    image: inception_wordpress
-    volumes:
-      - volume_wordpress:/var/www/wordpress
-    networks:
-      - inception_network
-    restart: always
-
-  # mariadb
-  mariadb:
-    container_name: Container_MariaDB
-    build: ./requirements/mariadb
-    image: inception_mariadb
-    volumes:
-      - volume_mariadb:/var/lib/mysql
+      - wordpress
     networks:
       - inception_network
     env_file:
       - .env
+    volumes:
+      - volume_wordpress:/var/www/wordpress
+
+  # wordpress
+  wordpress:
+    depends_on:
+      - mariadb
+    build: ./requirements/wordpress
+    # image: wordpress
+    container_name: wordpress
+    ports:
+      - "9000:9000"
     restart: always
+    networks:
+      - inception_network
+    env_file:
+      - .env
+    volumes:
+      - volume_wordpress:/var/www/wordpress
+
+  # mariadb
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    restart: always
+    image: inception_mariadb
+    networks:
+      - inception_network
+    env_file:
+      - .env
+    volumes:
+      - volume_mariadb:/var/lib/mysql
 
 # definition fo network
 networks:
   inception_network:
-    driver_opts:
-      IPAdress: "127.0.0.1"
+    # driver_opts:
+      # IPAdress: "127.0.0.1"
 
 # definition fo volumes
 volumes:
 
   # maridb volume
   volume_mariadb:
-    driver: local
     driver_opts:
-      device: ./requirements/mariadb/volume_mariadb
+      device: ./home/jinchoi/data/database
       type: volume
-      o: bind #?
+      o: bind
 
   # wordpress volume
   volume_wordpress:
-    driver: local
     driver_opts:
-      device: ./requirements/wordpress/volume_wordpress
+      device: ./home/jinchoi/data/wordpress
       type: volume
       o: bind

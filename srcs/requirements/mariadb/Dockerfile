@@ -1,13 +1,14 @@
 FROM debian:buster
 
-RUN apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get -y install mariadb-server
+# install mariadb
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install mariadb-server -y
 
-RUN apt-get -y install vim
+# config mariadb
+COPY tools/mariadb_setting.sh /mariadb_setting.sh
+COPY ./conf/my.cnf /etc/mysql/my.cnf
+COPY ./conf/wp_backup.sql ./
 
-# COPY ./tools/runMariaDB.sh .
-# COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+ENTRYPOINT ["sh", "./mariadb_setting.sh"]
+
 EXPOSE 3306
-CMD bin/bash
-# ENTRYPOINT [ "sh", "runMariaDB.sh" ]
