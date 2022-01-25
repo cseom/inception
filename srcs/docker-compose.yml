@@ -26,7 +26,6 @@ services:
     depends_on:
       - mariadb
     build: ./requirements/wordpress
-    # image: wordpress
     container_name: wordpress
     image: wordpress
     ports:
@@ -47,7 +46,6 @@ services:
     ports:
       - "3306:3306"
     restart: always
-    image: inception_mariadb
     networks:
       - inception_network
     env_file:
