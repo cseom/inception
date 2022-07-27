@@ -63,13 +63,13 @@ volumes:
   # maridb volume
   volume_mariadb:
     driver_opts:
-      device: /home/jinchoi/data/database
+      device: /home/seoko/data/database
       type: volume
       o: bind
 
   # wordpress volume
   volume_wordpress:
     driver_opts:
-      device: /home/jinchoi/data/wordpress
+      device: /home/seoko/data/wordpress
       type: volume
       o: bind
